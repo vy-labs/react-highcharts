@@ -3,8 +3,8 @@ var createReactClass = require('create-react-class');
 var PropTypes = require('prop-types');
 var win = typeof global === 'undefined' ? window : global;
 
-module.exports = function (chartType, Highcharts){
-  var displayName = 'Highcharts' + chartType;
+module.exports = function (chartTypeExport, Highcharts){
+  var displayName = 'Highcharts' + chartTypeExport;
   var result = createReactClass({
     displayName: displayName,
 
@@ -29,7 +29,7 @@ module.exports = function (chartType, Highcharts){
         throw new Error('Config must be specified for the ' + displayName + ' component');
       }
       let chartConfig = config.chart;
-      this.chart = new Highcharts[chartType]({
+      this.chart = new Highcharts[chartTypeExport]({
         ...config,
         chart: {
           ...chartConfig,
@@ -73,8 +73,8 @@ module.exports = function (chartType, Highcharts){
   });
 
   result.Highcharts = Highcharts;
-  result.withHighcharts = (Highcharts) =>{
-    return module.exports(chartType, Highcharts);
+  result.withHighcharts = (Highcharts, chartType) => {
+    return module.exports(chartType || chartTypeExport, Highcharts);
   };
   return result;
 };
